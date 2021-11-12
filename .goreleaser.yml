@@ -1,0 +1,34 @@
+release:
+  prerelease: auto
+  name_template: "{{.ProjectName}} v{{.Version}}"
+
+builds:
+- env:
+    - CGO_ENABLED=0
+  goos:
+    - windows
+    - darwin
+    - linux
+  goarch:
+    - amd64
+    - arm
+    - arm64
+    - 386
+  goarm:
+    - 6
+    - 7
+  ldflags:
+    - -s -w -X github.com/42wim/regtag/version.GitHash={{.ShortCommit}}
+
+archives:
+  -
+    id: regtag
+    builds:
+    - regtag
+    name_template: "{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    format: binary
+    files:
+      - none*
+
+checksum:
+  name_template: 'checksums.txt'
